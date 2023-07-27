@@ -1,3 +1,6 @@
+
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -14,7 +17,10 @@ public class cadastroVIEW extends javax.swing.JFrame {
      */
     public cadastroVIEW() {
         initComponents();
+        setLocationRelativeTo(null);
     }
+    conectaDAO conexao = new conectaDAO();
+    ProdutosDAO produtosDAO = new ProdutosDAO(conexao);
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -141,6 +147,8 @@ public class cadastroVIEW extends javax.swing.JFrame {
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         ProdutosDTO produto = new ProdutosDTO();
+        int resposta;
+        conexao.connectDB();
         String nome = cadastroNome.getText();
         String valor = cadastroValor.getText();
         String status = "A Venda";
@@ -148,6 +156,20 @@ public class cadastroVIEW extends javax.swing.JFrame {
         produto.setValor(Integer.parseInt(valor));
         produto.setStatus(status);
         
+              
+
+		if (status.isEmpty()) {
+
+			JOptionPane.showMessageDialog(null, "Erro de conexão com o Banco de Dados",
+					  "Comunicação DB", JOptionPane.ERROR_MESSAGE);
+
+		} else {
+
+			JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!",
+					  "Comunicação DB", JOptionPane.INFORMATION_MESSAGE);
+                        
+                }
+                limparCampos();
         ProdutosDAO produtodao = new ProdutosDAO();
         produtodao.cadastrarProduto(produto);
         
@@ -205,4 +227,9 @@ public class cadastroVIEW extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     // End of variables declaration//GEN-END:variables
+
+        public void limparCampos() {
+        cadastroNome.setText("");
+        cadastroValor.setText("");
+    }
 }
