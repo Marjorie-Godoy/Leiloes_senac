@@ -19,7 +19,11 @@ public class listagemVIEW extends javax.swing.JFrame {
     public listagemVIEW() {
         initComponents();
         listarProdutos();
+        setLocationRelativeTo(null);
     }
+    
+    	conectaDAO conexao = new conectaDAO();
+	ProdutosDAO produtosDAO = new ProdutosDAO(conexao);
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -203,12 +207,12 @@ public class listagemVIEW extends javax.swing.JFrame {
 
     private void listarProdutos(){
         try {
-            ProdutosDAO produtosdao = new ProdutosDAO();
+            conexao.connectDB();
             
             DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
             model.setNumRows(0);
             
-            ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutos();
+            ArrayList<ProdutosDTO> listagem = produtosDAO.listarProdutos();
             
             for(int i = 0; i < listagem.size(); i++){
                 model.addRow(new Object[]{
@@ -219,6 +223,8 @@ public class listagemVIEW extends javax.swing.JFrame {
                 });
             }
         } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+                    
         }
     
     }
